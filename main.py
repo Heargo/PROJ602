@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import matplotlib.animation as animation
 import polyscope as ps
+import polyscope.imgui as psim
 
 
 #load .obj and get the list of vertices
@@ -43,9 +44,13 @@ def loadFaces(filename):
     faces=faces-1
     return faces
 
+def addSource():
+    # ... do something important here ...
+    print("executing function")
+
 if __name__ == "__main__":
     #charge les vertices et faces
-    obj="dragon" #use arm, alien, dragon, bubble or cat /!\ alien et dragon prenent du temps
+    obj="arm" #use arm, alien, dragon, bubble or cat /!\ alien et dragon prenent du temps
     Affiche_prct_progression=True #conseillé pour alien et dragon.
     vertices=loadVertices('./data/'+obj+'.obj')
     faces=loadFaces('./data/'+obj+'.obj') #bug si pas que des triangles ? 
@@ -78,8 +83,38 @@ if __name__ == "__main__":
 
     # print(U)
 
+    # Define our callback function, which Polyscope will repeatedly execute while running the UI.
+# We can write any code we want here, but in particular it is an opportunity to create ImGui 
+# interface elements and define a custom UI.
+def callback():
+    global sources
+    psim.PushItemWidth(150)
+    psim.TextUnformatted("Séléctionnez un point pour ajouter une source.")
+    #input
+    # sourceCustom=psim.InputInt("Id du point ")
+    psim.Separator()
+
+    if(psim.Button("Ajouter une source")):
+        # This code is executed when the button is pressed
+        newSource=int(ps.get_selection()[1])
+        print(newSource)
+        if newSource<len(vertices):
+            sources.append(newSource)
+            U0=G.sources(sources)
+            U=G.implicitEuler( U0, 1000, 10,debug=Affiche_prct_progression )
+            ps_mesh.add_scalar_quantity("propagation", U, defined_on='vertices')
     
-    ps.init()
-    ps_mesh=ps.register_surface_mesh("sphere", vertices, faces)
-    ps_mesh.add_scalar_quantity("propagation", U, defined_on='vertices')
-    ps.show()
+    if(psim.Button("Reset les sources")):
+        sources=[]
+        U0=G.sources(sources)
+        U=G.implicitEuler( U0, 1000, 10,debug=Affiche_prct_progression )
+        ps_mesh.add_scalar_quantity("propagation", U, defined_on='vertices')
+    
+
+
+
+ps.init() 
+ps.set_user_callback(callback)
+ps_mesh=ps.register_surface_mesh("sphere", vertices, faces)
+ps_mesh.add_scalar_quantity("propagation", U, defined_on='vertices')
+ps.show()
