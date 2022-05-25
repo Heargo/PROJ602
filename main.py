@@ -6,6 +6,7 @@ import matplotlib.image as mpimg
 import matplotlib.animation as animation
 import polyscope as ps
 import polyscope.imgui as psim
+import sys
 
 
 #load .obj and get the list of vertices
@@ -50,38 +51,18 @@ def addSource():
 
 if __name__ == "__main__":
     #charge les vertices et faces
-    obj="arm" #use arm, alien, dragon, bubble or cat /!\ alien et dragon prenent du temps
+    path="arm" #use arm, alien, dragon, bubble or cat /!\ alien et dragon prenent du temps
+    if len(sys.argv)>1:
+        path=sys.argv[1]
     Affiche_prct_progression=True #conseillé pour alien et dragon.
-    vertices=loadVertices('./data/'+obj+'.obj')
-    faces=loadFaces('./data/'+obj+'.obj') #bug si pas que des triangles ? 
+    vertices=loadVertices(path)
+    faces=loadFaces(path) #bug si pas que des triangles ? 
         
 
     #creer la grille
     G = Grid(vertices=vertices, faces=faces)
+    sources=[]
     print("Model loaded")
-    #choisi une source
-    #source=(float(vertices[0][0]), float(vertices[0][1]), float(vertices[0][2]))
-
-    #init la matrice des sources
-    if obj=="arm":
-        sources=[44712,9401,5778,7548,11316,18775]
-    elif obj=="cat":
-        sources=[78783,469]
-    elif obj=="alien":
-        sources=[387810]
-    elif obj=="dragon":
-        sources=[311627]
-    else:
-        sources=[0]
-    U0=G.sources(sources)
-    print("Sources initialized")
-    # print(U0)
-
-    #calcule la propagation à un temps T
-    U=G.implicitEuler( U0, 1000, 10,debug=Affiche_prct_progression ) # T=100
-    print("Propagation done")
-
-    # print(U)
 
     # Define our callback function, which Polyscope will repeatedly execute while running the UI.
 # We can write any code we want here, but in particular it is an opportunity to create ImGui 
@@ -94,21 +75,28 @@ def callback():
     # sourceCustom=psim.InputInt("Id du point ")
     psim.Separator()
 
+    #liste des sources
+    psim.TextUnformatted("Liste des sources")
+    #affiche chaque id de la liste sources
+    for i in range(len(sources)):
+        psim.TextUnformatted(str(sources[i]))
+    psim.Separator()
+
     if(psim.Button("Ajouter une source")):
         # This code is executed when the button is pressed
         newSource=int(ps.get_selection()[1])
-        print(newSource)
         if newSource<len(vertices):
             sources.append(newSource)
-            U0=G.sources(sources)
-            U=G.implicitEuler( U0, 1000, 10,debug=Affiche_prct_progression )
-            ps_mesh.add_scalar_quantity("propagation", U, defined_on='vertices')
     
     if(psim.Button("Reset les sources")):
         sources=[]
+    
+    if(psim.Button("Diffuse")):
         U0=G.sources(sources)
         U=G.implicitEuler( U0, 1000, 10,debug=Affiche_prct_progression )
         ps_mesh.add_scalar_quantity("propagation", U, defined_on='vertices')
+        print("Diffusion terminée")
+
     
 
 
@@ -116,5 +104,4 @@ def callback():
 ps.init() 
 ps.set_user_callback(callback)
 ps_mesh=ps.register_surface_mesh("sphere", vertices, faces)
-ps_mesh.add_scalar_quantity("propagation", U, defined_on='vertices')
 ps.show()
