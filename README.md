@@ -17,5 +17,6 @@ pip install numpy matplotlib scipy polyscope
 ```sh 
 python main.py path/fichier.obj
 ```
+Le fichier obj doit être triangulé. Pour trianguler un obj, utiliser Blender. [Docs Blender](https://docs.blender.org/manual/fr/dev/modeling/modifiers/generate/triangulate.html)
 Par defaut, si le chemin n'est pas précisé le projet utilise le fichier `./data/arm.obj`
 
