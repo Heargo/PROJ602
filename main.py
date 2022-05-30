@@ -51,7 +51,7 @@ def addSource():
 
 if __name__ == "__main__":
     #charge les vertices et faces
-    path="arm" #use arm, alien, dragon, bubble or cat /!\ alien et dragon prenent du temps
+    path="./data/arm.obj" #use arm, alien, dragon, bubble or cat /!\ alien et dragon prenent du temps
     if len(sys.argv)>1:
         path=sys.argv[1]
     Affiche_prct_progression=True #conseillé pour alien et dragon.
