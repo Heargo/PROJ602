@@ -34,10 +34,6 @@ Une fois que vous avez diffusé, vous pouvez voir le résultat en cliquant sur l
 ![Image](./images/diffused.png)
 Après une diffusion, on voit bien sur le coude qu'une source de chaleur a été placée et qu'elle s'est diffusée.
 
-## Quelques exemples
-
-![Image](./images/example_1.png)
-![Image](./images/example_2.png)
 
 ## Influence des paramètres
 
@@ -48,4 +44,8 @@ Le nombre de triangles peut grandement influencer le temps de diffusion et la di
 
 Plus T est grand, plus la chaleur est diffusée. Plus le rapport T/dt est petit, plus la diffusion sera précise mais plus le temps de diffusion sera long.
 
+## Quelques exemples
+
+![Image](./images/example_1.png)
+![Image](./images/example_2.png)
 
