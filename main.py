@@ -93,7 +93,7 @@ def callback():
     
     if(psim.Button("Diffuse")):
         U0=G.sources(sources)
-        U=G.implicitEuler( U0, 1000, 10,debug=Affiche_prct_progression )
+        U=G.implicitEuler( U0, 100, 50,debug=Affiche_prct_progression )
         ps_mesh.add_scalar_quantity("propagation", U, defined_on='vertices')
         print("Diffusion terminée")
 

@@ -1,7 +1,7 @@
 # PROJ602
 Calcul de distances et de géodésiques sur des surfaces triangulées
 
-## A quoi sert ce projet ?
+## À quoi sert ce projet ?
 Ce projet permet de diffuser la chaleur d'après une ou des sources sur un objet 3D. Attention, l'objet doit être triangulé et en un seul mesh.
 
 ## Quels sont les librairies utilisées ?
